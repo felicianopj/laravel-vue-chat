@@ -13,7 +13,11 @@
 			<div class="panel-heading">Chat with {{ user.name }}</div>
 
 			<div class="panel-body">
-				Chat messages
+				<strong>Sent Messages</strong>
+                <p v-for="message in sentMessages">{{ message.content }}</p>
+                <br>
+                <strong>Received Messages</strong>
+                <p v-for="message in receivedMessages">{{ message.content }}</p>
 			</div>
 		</div>
 	</div>
@@ -23,11 +27,15 @@
     export default {
     	data: function () {
     		return {
-    			userList: [],
+                userList: [],
                 user: { id: '', name: '' },
+                authUser: { id: '', name: '' },
+                sentMessages: [],
+                receivedMessages: []
     		}
     	},
         ready: function () {
+            this.fetchAuthUser()
             this.fetchUsers()
         },
         methods: {
@@ -35,10 +43,29 @@
                 this.$http.get('api/users').then(function (response) {
                     this.userList = response.data
                     this.user = response.data[0]
+                    this.fetchSentMessages()
+                    this.fetchReceivedMessages()
+                });
+            },
+            fetchAuthUser: function () {
+                this.$http.get('api/auth-user').then(function (response) {
+                    this.authUser = response.data
+                });
+            },
+            fetchSentMessages: function () {
+                this.$http.get('api/sender-messages/' + this.user.id).then(function (response) {
+                    this.sentMessages = response.data
+                });
+            },
+            fetchReceivedMessages: function () {
+            	this.$http.get('api/receiver-messages/' + this.user.id).then(function (response) {
+                    this.receivedMessages = response.data
                 });
             },
             chooseUser: function (user) {
                 this.user = user
+                this.fetchSentMessages(this.user)
+            	this.fetchReceivedMessages(this.user)
             }
         },
     }

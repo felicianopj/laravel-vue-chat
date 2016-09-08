@@ -20,6 +20,12 @@ class MessagesTableSeeder extends Seeder
         ]);
 
         App\Message::create([
+            'sender_id' => 1,
+            'receiver_id' => 2,
+            'content' => 'Another User1 to User2'
+        ]);
+
+        App\Message::create([
         	'sender_id' => 1,
         	'receiver_id' => 3,
         	'content' => 'User1 to User3'
@@ -29,6 +35,12 @@ class MessagesTableSeeder extends Seeder
         	'sender_id' => 2,
         	'receiver_id' => 1,
         	'content' => 'User2 to User1'
+        ]);
+
+        App\Message::create([
+            'sender_id' => 2,
+            'receiver_id' => 1,
+            'content' => 'Another User2 to User1'
         ]);
 
         App\Message::create([
