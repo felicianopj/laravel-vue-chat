@@ -1,0 +1,16 @@
+.user-list {
+	cursor: pointer;
+}
+
+.user-list:hover {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.user-link {
+	color: #636b6f;	
+}
+
+.user-link:hover {
+	text-decoration: none;
+}

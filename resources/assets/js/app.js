@@ -13,7 +13,6 @@ require('./bootstrap');
  * the application, or feel free to tweak this setup for your needs.
  */
 
-Vue.component('users', require('./components/Users.vue'));
 Vue.component('chat', require('./components/Chat.vue'));
 
 const app = new Vue({

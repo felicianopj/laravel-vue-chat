@@ -14,14 +14,20 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->delete();
         
         App\User::create([
-        	'name' => 'Joseph',
-        	'email' => 'joseph@mail.com',
+        	'name' => 'User1',
+        	'email' => 'user1@mail.com',
         	'password' => bcrypt(123)
         ]);
 
         App\User::create([
-        	'name' => 'Jotaro',
-        	'email' => 'jotaro@mail.com',
+            'name' => 'User2',
+            'email' => 'user2@mail.com',
+            'password' => bcrypt(123)
+        ]);
+
+        App\User::create([
+        	'name' => 'User3',
+        	'email' => 'user3@mail.com',
         	'password' => bcrypt(123)
         ]);
     }
