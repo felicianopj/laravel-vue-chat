@@ -13,11 +13,7 @@
 			<div class="panel-heading">Chat with {{ user.name }}</div>
 
 			<div class="panel-body">
-				<strong>Sent Messages</strong>
-                <p v-for="message in sentMessages">{{ message.content }}</p>
-                <br>
-                <strong>Received Messages</strong>
-                <p v-for="message in receivedMessages">{{ message.content }}</p>
+                <p v-for="message in messages">{{ message.content }}</p>
 			</div>
 		</div>
 	</div>
@@ -30,12 +26,15 @@
                 userList: [],
                 user: { id: '', name: '' },
                 authUser: { id: '', name: '' },
-                sentMessages: [],
-                receivedMessages: []
+                messages: {
+                    sender_id: '',
+                    receiver_id: '',
+                    content: '',
+                    created_at: '',
+                },
     		}
     	},
         ready: function () {
-            this.fetchAuthUser()
             this.fetchUsers()
         },
         methods: {
@@ -43,8 +42,8 @@
                 this.$http.get('api/users').then(function (response) {
                     this.userList = response.data
                     this.user = response.data[0]
-                    this.fetchSentMessages()
-                    this.fetchReceivedMessages()
+                    this.fetchAuthUser()
+                    this.fetchMessages()
                 });
             },
             fetchAuthUser: function () {
@@ -52,20 +51,25 @@
                     this.authUser = response.data
                 });
             },
-            fetchSentMessages: function () {
-                this.$http.get('api/sender-messages/' + this.user.id).then(function (response) {
-                    this.sentMessages = response.data
-                });
-            },
-            fetchReceivedMessages: function () {
-            	this.$http.get('api/receiver-messages/' + this.user.id).then(function (response) {
-                    this.receivedMessages = response.data
+            fetchMessages: function () {
+                this.$http.get('api/messages/' + this.user.id).then(function (response) {
+                    this.messages = response.data
+                    this.assignMessages()
                 });
             },
             chooseUser: function (user) {
                 this.user = user
-                this.fetchSentMessages(this.user)
-            	this.fetchReceivedMessages(this.user)
+                this.fetchMessages()
+            },
+            assignMessages: function () {
+                for (var i = 0; i <= this.messages.length; i++) {
+                    if (this.messages[i].sender_id == this.authUser.id) {
+                        this.messages[i].content = this.authUser.name + ' says: ' + this.messages[i].content
+                    }
+                    else if (this.messages[i].receiver_id == this.authUser.id) {
+                        this.messages[i].content = this.user.name + ' says: ' + this.messages[i].content
+                    }
+                }
             }
         },
     }

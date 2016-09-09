@@ -25,8 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::group(['prefix' => 'api'], function () {
 		Route::get('sender', ['uses' => 'ChatController@getSender', 'as' => 'chat.sender']);
 		Route::get('receiver', ['uses' => 'ChatController@getReceiver', 'as' => 'chat.receiver']);
-		Route::get('sender-messages/{id}', ['uses' => 'ChatController@getSenderMessages', 'as' => 'chat.sender.messages']);
-		Route::get('receiver-messages/{id}', ['uses' => 'ChatController@getReceiverMessages', 'as' => 'chat.receiver.messages']);
+		Route::get('messages/{id}', ['uses' => 'ChatController@getMessages', 'as' => 'chat.messages']);
 		Route::post('message', ['uses' => 'ChatController@postMessages', 'as' => 'chat.message.send']);
 		Route::patch('message', ['uses' => 'ChatController@patchMessages', 'as' => 'chat.message.update']);
 		Route::delete('message', ['uses' => 'ChatController@deleteMessages', 'as' => 'chat.message.delete']);

@@ -24,17 +24,13 @@ class ChatController extends Controller
 
 	}
 
-	public function getSenderMessages(int $receiver_id)
+	public function getMessages(int $user_id)
 	{
 		return Message::where('sender_id', Auth::user()->id)
-			->where('receiver_id', $receiver_id)
-			->get();
-	}
-
-	public function getReceiverMessages(int $sender_id)
-	{
-		return Message::where('sender_id', $sender_id)
+			->where('receiver_id', $user_id)
+			->orWhere('sender_id', $user_id)
 			->where('receiver_id', Auth::user()->id)
+			->orderBy('created_at', 'asc')
 			->get();
 	}
 
