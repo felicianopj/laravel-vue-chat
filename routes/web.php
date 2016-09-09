@@ -23,8 +23,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'api'], function () {
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('/', ['uses' => 'ChatController@index', 'as' => 'chat.index']);
 	Route::group(['prefix' => 'api'], function () {
-		Route::get('sender', ['uses' => 'ChatController@getSender', 'as' => 'chat.sender']);
-		Route::get('receiver', ['uses' => 'ChatController@getReceiver', 'as' => 'chat.receiver']);
 		Route::get('messages/{id}', ['uses' => 'ChatController@getMessages', 'as' => 'chat.messages']);
 		Route::post('message', ['uses' => 'ChatController@postMessages', 'as' => 'chat.message.send']);
 		Route::patch('message', ['uses' => 'ChatController@patchMessages', 'as' => 'chat.message.update']);

@@ -14,16 +14,6 @@ class ChatController extends Controller
     	return view('index');
     }
 
-    public function getSender()
-    {
-    	
-    }
-
-	public function getReceiver()
-	{
-
-	}
-
 	public function getMessages(int $user_id)
 	{
 		return Message::where('sender_id', Auth::user()->id)
@@ -34,9 +24,13 @@ class ChatController extends Controller
 			->get();
 	}
 
-	public function postMessages()
+	public function postMessages(Request $request)
 	{
-
+		$message = new Message;
+		$message->sender_id = Auth::user()->id;
+		$message->receiver_id = $request->input('id');
+		$message->content = $request->input('content');
+		$message->save();
 	}
 
 	public function patchMessages()
