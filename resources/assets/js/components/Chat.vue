@@ -10,20 +10,21 @@
 
     <div class="col-md-9">
       <div class="panel panel-default">
-         <div class="panel-heading">Chat with {{ user.name }}</div>
-         <div class="panel-body">
-            <p v-for="message in messages">{{ message.content }}</p>
-            <form action="" method="POST" @submit.prevent="sendMessage">
-                <div class="row">
-                    <div class="col-lg-9">
+       <div class="panel-heading">Chat with {{ user.name }}</div>
+       <div class="panel-body">
+        <p  v-for="message in messages">
+                <span v-bind:class="{ 'message-sent': isMessageSent(message), 'message-received': isMessageReceived(message) }">{{ message.content }}</span>
+        </p>
+        <form action="" method="POST" @submit.prevent="sendMessage">
+            <div class="row">
+                <div class="col-lg-9">
                     <input v-model="newMessage" type="text" name="content" class="form-control" placeholder="Type your message" autofocus>
-                    </div>
-                    <div class="col-lg-3">
-                        <button type="submit" class="btn btn-primary form-control send-button">Send</button>
-                    </div>
                 </div>
-            </form>
-        </div>
+                <div class="col-lg-3">
+                    <button type="submit" class="btn btn-primary form-control send-button">Send</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 </template>
@@ -86,6 +87,13 @@
                     this.newMessage = ''
                     this.fetchMessages()
                 });
+            },
+            isMessageSent: function (message) {
+                return this.authUser.id == message.sender_id
+                return true;
+            },
+            isMessageReceived: function (message) {
+                return this.authUser.id == message.receiver_id
             }
         },
     }
