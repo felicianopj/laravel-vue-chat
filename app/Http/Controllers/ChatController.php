@@ -46,9 +46,9 @@ class ChatController extends Controller
 		$message->save();
 	}
 
-	public function deleteMessages()
+	public function deleteMessages(int $message_id)
 	{
-
+		return Message::destroy($message_id);
 	}
 
 }

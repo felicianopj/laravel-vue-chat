@@ -29,3 +29,7 @@
 .message-received {
 	color: red;
 }
+
+.delete-button {
+	cursor: pointer;
+}

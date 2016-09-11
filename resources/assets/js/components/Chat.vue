@@ -14,6 +14,7 @@
        <div class="panel-body">
         <p  v-for="message in messages">
                 <span @click="editMessage(message)" v-bind:class="{ 'message-sent': isMessageSent(message), 'message-received': isMessageReceived(message) }">{{ message.content }}</span>
+                <span v-if="edit && isMessageSent(message)" @click="deleteMessage(message)" class="delete-button">x</span>
         </p>
         <form action="" method="POST" @submit.prevent="edit ? updateMessage(newMessage.id) : sendMessage()">
             <input v-if="edit" name="_method" type="hidden" value="PUT">
@@ -38,7 +39,7 @@
                 user: { id: '', name: '' },
                 authUser: { id: '', name: '' },
                 edit: false,
-                newMessage: { id: '', content: ''},
+                newMessage: { id: '', sender_id: '', content: ''},
                 messages: { sender_id: '', receiver_id: '', content: '', created_at: '' },
             }
         },
@@ -68,6 +69,7 @@
             chooseUser: function (user) {
                 this.user = user
                 this.fetchMessages()
+                this.edit = false
             },
             assignMessages: function () {
                 for (var i = 0; i <= this.messages.length; i++) {
@@ -88,8 +90,8 @@
             getMessage: function (id) {
                 this.$http.get('api/message/' + id).then(function (response) {
                     this.newMessage.id = response.data.id
+                    this.newMessage.sender_id = response.data.sender_id
                     this.newMessage.content = response.data.content
-                    console.log(id)
                 });
             },
             updateMessage: function (id) {
@@ -105,6 +107,14 @@
                     this.getMessage(message.id)
                 }
             },
+            deleteMessage: function (message) {
+                if (this.isMessageSent(message)) {
+                    this.$http.delete('api/message/' + message.id).then(function (message) {
+                        this.fetchMessages()
+                        this.emptyNewMessage()
+                    });
+                }
+            },
             isMessageSent: function (message) {
                 return this.authUser.id == message.sender_id
             },
@@ -113,6 +123,7 @@
             },
             emptyNewMessage: function () {
                 this.newMessage.id = ''
+                this.newMessage.sender_id = ''
                 this.newMessage.content = ''
             },
         },
