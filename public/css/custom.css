@@ -15,7 +15,7 @@
 	text-decoration: none;
 }
 
- @media (max-width: 767px) {
+ @media (max-width: 1200px) {
 	.send-button {
 		margin-top: 10px;
 	}

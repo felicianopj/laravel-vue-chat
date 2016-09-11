@@ -14,6 +14,12 @@ class ChatController extends Controller
     	return view('index');
     }
 
+    public function getMessage(int $message_id)
+    {
+    	$message = Message::findOrFail($message_id);
+    	return (Auth::user()->id == $message->sender_id) ? $message : null;
+    }
+
 	public function getMessages(int $user_id)
 	{
 		return Message::where('sender_id', Auth::user()->id)
@@ -33,9 +39,11 @@ class ChatController extends Controller
 		$message->save();
 	}
 
-	public function patchMessages()
+	public function updateMessages(Request $request, int $message_id)
 	{
-
+		$message = Message::find($message_id);
+		$message->content = $request->input('content');
+		$message->save();
 	}
 
 	public function deleteMessages()
