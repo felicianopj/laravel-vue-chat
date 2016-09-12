@@ -6,6 +6,8 @@ use Auth;
 use App\Message;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreMessageRequest;
+use App\Http\Requests\DeleteMessageRequest;
 
 class ChatController extends Controller
 {
@@ -30,23 +32,23 @@ class ChatController extends Controller
 			->get();
 	}
 
-	public function postMessages(Request $request)
+	public function postMessage(StoreMessageRequest $request)
 	{
 		$message = new Message;
 		$message->sender_id = Auth::user()->id;
-		$message->receiver_id = $request->input('id');
+		$message->receiver_id = $request->input('receiver_id');
 		$message->content = $request->input('content');
 		$message->save();
 	}
 
-	public function updateMessages(Request $request, int $message_id)
+	public function updateMessage(StoreMessageRequest $request, int $message_id)
 	{
 		$message = Message::find($message_id);
 		$message->content = $request->input('content');
 		$message->save();
 	}
 
-	public function deleteMessages(int $message_id)
+	public function deleteMessage(DeleteMessageRequest $request, int $message_id)
 	{
 		return Message::destroy($message_id);
 	}

@@ -17,7 +17,7 @@
                 <span v-if="edit && isMessageSent(message)" @click="deleteMessage(message)" class="delete-button">x</span>
         </p>
         <form action="" method="POST" @submit.prevent="edit ? updateMessage(newMessage.id) : sendMessage()">
-            <input v-if="edit" name="_method" type="hidden" value="PUT">
+            <!-- <input v-if="edit" name="_method" type="hidden" value="PUT"> -->
             <div class="row">
                 <div class="col-lg-9">
                     <input v-model="newMessage.content" type="text" name="content" class="form-control" placeholder="Type your message" autofocus>
@@ -81,12 +81,6 @@
                     }
                 }
             },
-            sendMessage: function () {
-                this.$http.post('api/message', {'id': this.user.id, 'content': this.newMessage.content }).then( function (response) {
-                    this.fetchMessages()
-                    this.emptyNewMessage()
-                });
-            },
             getMessage: function (id) {
                 this.$http.get('api/message/' + id).then(function (response) {
                     this.newMessage.id = response.data.id
@@ -94,25 +88,32 @@
                     this.newMessage.content = response.data.content
                 });
             },
+            sendMessage: function () {
+                this.$http.post('api/message', { 'sender_id': this.authUser.id, 'receiver_id': this.user.id, 'content': this.newMessage.content }).then( function (response) {
+                    this.fetchMessages()
+                    this.emptyNewMessage()
+                });
+            },
             updateMessage: function (id) {
-                this.$http.patch('api/message/' + id, { 'content': this.newMessage.content }).then(function (response) {
+                this.$http.patch('api/message/' + id, { 'sender_id': this.authUser.id, 'content': this.newMessage.content }).then(function (response) {
                     this.fetchUsers()
                     this.emptyNewMessage()
                     this.edit = false
                 });
             },
+            deleteMessage: function (message) {
+                if (this.isMessageSent(message)) {
+                    this.$http.delete('api/message/' + message.id).then(function (response) {
+                        console.log(response.body)
+                        this.fetchMessages()
+                        this.emptyNewMessage()
+                    });
+                }
+            },
             editMessage: function (message) {
                 if (this.isMessageSent(message)) {
                     this.edit = true
                     this.getMessage(message.id)
-                }
-            },
-            deleteMessage: function (message) {
-                if (this.isMessageSent(message)) {
-                    this.$http.delete('api/message/' + message.id).then(function (message) {
-                        this.fetchMessages()
-                        this.emptyNewMessage()
-                    });
                 }
             },
             isMessageSent: function (message) {
