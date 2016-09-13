@@ -56,6 +56,9 @@
                     })
                     .listen('MessageDeleted', event => {
                         this.fetchMessages()
+                    })
+                    .listen('MessageUpdated', event => {
+                        this.fetchMessages()
                     });
             },
             fetchUsers: function () {

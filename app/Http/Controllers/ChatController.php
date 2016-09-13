@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use App\Events\MessageDeleted;
+use App\Events\MessageUpdated;
 use App\Http\Requests\StoreMessageRequest;
 use App\Http\Requests\DeleteMessageRequest;
 
@@ -50,6 +51,7 @@ class ChatController extends Controller
 		$message = Message::find($message_id);
 		$message->content = $request->input('content');
 		$message->save();
+		event (new MessageUpdated($message));
 	}
 
 	public function deleteMessage(DeleteMessageRequest $request, int $message_id)
