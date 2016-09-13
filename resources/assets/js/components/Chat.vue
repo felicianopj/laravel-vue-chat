@@ -44,9 +44,17 @@
             }
         },
         ready: function () {
-            this.fetchUsers()
+            this.listen();
+            this.fetchUsers();
         },
         methods: {
+            listen() {
+                Echo.channel('chat.1.messages')
+                    .listen('MessageSent', event => {
+                        this.messages.push(event.message)
+                        this.assignMessages()
+                    });
+            },
             fetchUsers: function () {
                 this.$http.get('api/users').then(function (response) {
                     this.userList = response.data

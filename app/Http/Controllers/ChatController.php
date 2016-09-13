@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Message;
 use App\Http\Requests;
+use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreMessageRequest;
 use App\Http\Requests\DeleteMessageRequest;
@@ -39,6 +40,8 @@ class ChatController extends Controller
 		$message->receiver_id = $request->input('receiver_id');
 		$message->content = $request->input('content');
 		$message->save();
+
+		event(new MessageSent($message));
 	}
 
 	public function updateMessage(StoreMessageRequest $request, int $message_id)
