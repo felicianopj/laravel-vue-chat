@@ -53,6 +53,9 @@
                     .listen('MessageSent', event => {
                         this.messages.push(event.message)
                         this.assignMessages()
+                    })
+                    .listen('MessageDeleted', event => {
+                        this.fetchMessages()
                     });
             },
             fetchUsers: function () {
